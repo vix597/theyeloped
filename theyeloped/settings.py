@@ -35,6 +35,7 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    'elopement.apps.ElopementConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

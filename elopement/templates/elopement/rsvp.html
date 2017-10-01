@@ -1,0 +1,52 @@
+{% extends 'elopement/base.html' %}
+
+{% block head %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <h1>RSVP by 04/20/2018</h1>
+
+    <form action="{% url 'elopement:search_invitees' %}" method="POST">
+        {% csrf_token %}
+        First Name: <input name="first_name" type="text"><br>
+        Last Name: <input name="last_name" type="text"><br>
+        <button type="submit">Submit</button>
+    </form>
+    {% if invited is True and rsvp is not None %}
+        <p>Congrats {{rsvp.first_name}} {{rsvp.last_name}}, you are invited to the party!</p>
+        <p>Please fill out the following form</p>
+        <form action="{% url 'elopement:rsvp' %}" method="POST">
+            {% csrf_token %}
+            
+            Are you coming?<br>
+            <div>
+                <input type="radio" id="choice_yes" name="attending" value="True">
+                <label for="choice_yes">Yes</label>
+            
+                <input type="radio" id="choice_no" name="attending" value="False">
+                <label for="choice_no">No</label>
+            </div>
+
+            Who are you bringing? <input name="names" type="text"><br>
+            Any allergies?<input name="allergies" type="text"><br>
+            What song will get you out on the dance floor?<input name="favorite_song" type="text"><br>
+            Note for the bride & groom:<input name="note" type="text"><br>
+            <input name="first_name" hidden type="text" value="{{ rsvp.first_name }}">
+            <input name="last_name" hidden type="text" value="{{ rsvp.last_name }}">
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    {% elif invited is False %}
+        <p>You are either not invited, or I messed something up. If you reveived an invite, just mail in your RSVP</p>
+    {% elif invited is None %}
+        <p>Please lookup your invitation</p>
+    {% else %}
+        <p>There must have been an error. If you reveived and invite, just mail in your RSVP</p>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+{% endblock %}
